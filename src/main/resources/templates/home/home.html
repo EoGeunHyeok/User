@@ -76,8 +76,8 @@
         <a href="/">밥은 먹고 다니냐?</a>
     </div>
     <div style="float: right;">
-        <a id="loginLink" href="member/login" onclick="toggleLoginState(true)">로그인</a>
-        <span id="logoutButton" style="display: none;"><a href="#" onclick="logout()">로그아웃</a></span>
+        <a th:href="@{/member/login}" class="nav-link" sec:authorize="isAnonymous()" onclick="toggleLoginState(true)">로그인</a>
+        <span th:href="@{/member/logout}" class="nav-link" sec:authorize="isAuthenticated()" style="display: none;"><a href="#" onclick="logout()">로그아웃</a></span>
     </div>
     <div style="float: right; margin-right: 10px;">
         <a href="member/myPage">마이 프로필</a>
@@ -105,8 +105,8 @@
 
     // 헤더의 로그인 링크와 로그아웃 버튼을 제어하는 함수
     function toggleLoginState(loggedIn) {
-        var loginLink = document.getElementById("loginLink");
-        var logoutButton = document.getElementById("logoutButton");
+        var loginLink = document.querySelector(".nav-link[sec\\:authorize=\"isAnonymous()\"]");
+        var logoutButton = document.querySelector(".nav-link[sec\\:authorize=\"isAuthenticated()\"]");
 
         if (loggedIn) {
             // 로그인되어 있는 경우, 로그아웃 버튼 표시

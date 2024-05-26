@@ -2,10 +2,13 @@ package com.example.bob;
 
 import com.example.bob.domain.member.entity.Member;
 import com.example.bob.domain.member.service.MemberService;
-import com.example.bob.domain.post.service.PostService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
 
 
 @SpringBootTest
@@ -14,19 +17,32 @@ class BlogApplicationTests {
 	@Autowired
 	MemberService memberService;
 
-	@Autowired
-	PostService postService;
 
 	@Test
 	void contextLoads() {
-		for (int i = 0; i <= 30; i++) {
-			String title = String.format("제목 %d", i);
-			String content = String.format("내용 %d", i);
-			this.postService.create(title, content);
-		}
-		Member member1 = memberService.signup("user1", "1234", "현철쿤", "user1@example.com", "123456789", "https://i.ibb.co/j5tSMPV/image.jpg", "남자");
-		Member member2 = memberService.signup("user2", "1234", "예지", "user2@example.com", "987654321", "https://i.ibb.co/j5tSMPV/image.jpg", "여자");
-		Member member3 = memberService.signup("user3", "1234", "유나", "user3@example.com", "456789123", "https://i.ibb.co/j5tSMPV/image.jpg", "여자");
+			try {
+				MockMultipartFile selfie = new MockMultipartFile("dd", "https://i.ibb.co/j5tSMPV/image.jpg", "image/jpeg", "https://i.ibb.co/j5tSMPV/image.jpg".getBytes());
+				String phoneNumber = "01043884075";
+				String name = "황예지";
+				String username = "qwer";
+				String password = "123";
+				String email = "123@naver.com";
+				String gender = "여자";
+				String region = "대전";
+				String favoriteFood = "중식";
+				int age = 25; // 나이 추가
 
-	}
+				// 회원 가입 메서드 호출
+				Member member = memberService.signup(selfie, phoneNumber, name, username, password, email, age, gender, region, favoriteFood);
+
+				// 테스트 결과 확인
+				ModelAndView modelAndView = new ModelAndView("profile"); // 프로필 템플릿의 이름으로 ModelAndView 객체 생성
+				modelAndView.addObject("member", member); // 회원 정보를 모델에 추가
+
+				// 실제로는 렌더링되는 템플릿에 따라 반환된 ModelAndView를 처리하는 코드가 있어야 합니다.
+			} catch (IOException e) {
+				// 예외 처리 코드 작성
+				e.printStackTrace(); // 예외 메시지 출력 또는 로깅 등
+			}
+		}
 }

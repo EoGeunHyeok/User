@@ -74,11 +74,11 @@
 
 <body>
 <!-- 메인으로 이동하는 버튼 -->
-<a href="http://localhost:8010/" class="main-btn">메인 화면으로 이동</a>
+<a th:href="@{/}" class="main-btn">메인 화면으로 이동</a>
 
 <div class="container">
     <h1>
-        <img src="https://i.ibb.co/j5tSMPV/image.jpg" alt="밥친구 로그인" width="200" height="150">
+        <img th:src="@{https://i.ibb.co/j5tSMPV/image.jpg}" alt="밥친구 로그인" width="200" height="150">
         <nav>밥친구 회원 가입</nav>
     </h1>
 
@@ -110,6 +110,8 @@
             <option value="서울">서울</option>
             <option value="경기">경기</option>
             <option value="인천">인천</option>
+            <option value="대전">대전</option>
+            <option value="부산">부산</option>
             <!-- 다른 지역 옵션들 추가 -->
         </select><br><br>
         <!-- 생략: 관심사, MBTI, 취미, SNS 아이디, 직업, 선호음식 필드 -->
@@ -120,7 +122,7 @@
     </form>
 
     <!-- 로그인 페이지로 이동하는 링크 -->
-    <a href="/login">이미 회원이신가요? 로그인하기</a>
+    <a th:href="@{/member/login}">이미 회원이신가요? 로그인하기</a>
 </div>
 </body>
 </html>
