@@ -1,6 +1,7 @@
 package com.example.bob.domain.global.initdata;
 
 
+
 import com.example.bob.domain.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -33,6 +34,8 @@ public class Dev {
                 // 회원가입 메서드 호출
                 memberService.signup("user1", "01012345678", "user1", "1234", "admin@test.com",
                         26, "남자", "대전", "일식", multipartFile);
+                memberService.signup("user2", "01012345678", "user2", "1234", "admin@test.com",
+                        25, "여자", "대전", "일식", multipartFile);
             } catch (IOException e) {
                 e.printStackTrace();
             }

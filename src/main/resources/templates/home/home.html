@@ -80,8 +80,14 @@
         <a sec:authorize="isAuthenticated()" href="/member/logout">로그아웃</a>
     </div>
     <div style="float: right; margin-right: 10px;">
-        <a href="member/myPage">마이 프로필</a>
+        <a sec:authorize="isAuthenticated()" href="/member/myPage">마이페이지</a>
     </div>
+    <div style="float: right; margin-right: 10px;">
+    <span sec:authorize="isAuthenticated()">
+        <span th:text="${#authentication.name}"></span>
+    </span>
+    </div>
+
 </header>
 
 <div class="container">

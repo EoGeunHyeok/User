@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,4 +45,14 @@ public class MemberService {
         // 생성된 회원 객체를 저장소에 저장
         memberRepository.save(member);
     }
+
+
+
+
+    private Optional<Member> findByUsername(String username) {
+        return memberRepository.findByusername(username);
+    }
+
+
+
 }
