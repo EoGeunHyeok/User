@@ -1,7 +1,22 @@
 spring:
   profiles:
-    active: dev  # ?????? application-dev.yml ? ????? ??
-    include: secret # active ?? ???? (application-dev.yml) ??? application-secret.yml ? ????? ??
+    active: dev
+    include: secret
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            scope:
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: 'http://localhost:8010/{action}/oauth2/code/{registrationId}'
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
@@ -18,3 +33,4 @@ spring:
       org.hibernate.orm.jdbc.bind: TRACE
       org.hibernate.orm.jdbc.extract: TRACE
       org.springframework.transaction.interceptor: TRACE
+

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 
+import java.util.Base64;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -30,6 +32,10 @@ public class MemberController {
 public String myPage(Model model) {
     // 현재 로그인된 회원 정보를 가져와 모델에 추가
     Member currentMember = memberService.getCurrentMember();
+    byte[] imageBytes = currentMember.getSelfie();
+    String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+    model.addAttribute("bases64Image", currentMember);
     model.addAttribute("member", currentMember);
     return "member/myPage";
 }

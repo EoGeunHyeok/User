@@ -1,0 +1,42 @@
+package com.example.bob.domain.global.initdata;
+
+
+import com.example.bob.domain.member.service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+@Configuration
+@Profile("dev")
+public class Dev {
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    @Bean
+    public ApplicationRunner init(MemberService memberService) {
+        return args -> {
+            try {
+                // 로컬 파일 경로
+                String filePath = "C:\\Users\\SBS\\Desktop\\밥먹냐.jpeg";
+                File file = new File(filePath);
+                FileInputStream input = new FileInputStream(file);
+                MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "image/jpeg", input);
+
+                // 회원가입 메서드 호출
+                memberService.signup("user1", "01012345678", "user1", "1234", "admin@test.com",
+                        26, "남자", "대전", "일식", multipartFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+    }
+}
+

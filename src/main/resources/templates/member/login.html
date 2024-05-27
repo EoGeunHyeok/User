@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인</title>
     <style>
         body {
@@ -33,7 +31,7 @@
         }
         input[type="text"],
         input[type="password"] {
-            width: calc(100% - 20px); /* padding의 총합을 빼줍니다 */
+            width: calc(100% - 20px);
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
@@ -54,73 +52,104 @@
         .btn:hover {
             background-color: #0056b3;
         }
-        /* 상단 좌측에 위치시킬 버튼 스타일 */
-        .main-btn {
-            position: absolute;
-            top: 10px;
-            left: 10px;
+        .oauth-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 12px 0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+        .oauth-btn .icon {
+            background: url('https://example.com/google-icon.png') no-repeat;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .oauth-btn.google {
+            background-color: #4285f4;
+        }
+        .oauth-btn.google:hover {
+            background-color: #357ae8;
+        }
+        .oauth-btn.kakao {
+            background-color: #fee500;
+            color: #3c1e1e;
+        }
+        .oauth-btn.kakao:hover {
+            background-color: #ffd700;
+        }
+        .register-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 12px 0;
+            background-color: #34a853;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .register-btn:hover {
+            background-color: #2c8c42;
         }
     </style>
 </head>
+
 <body>
-<!-- 메인으로 이동하는 버튼 -->
-<a href="http://localhost:8010/" class="main-btn">메인 화면으로 이동</a>
 
 <div class="container">
+    <header class="header">
+        <div style="float: left;">
+            <a href="/">밥은 먹고 다니냐?</a>
+        </div>
+        <div style="float: right;">
+            <a href="/login">로그인</a>
+        </div>
+        <div style="float: right; margin-right: 10px;">
+            <a href="/myprofile">마이 프로필</a>
+        </div>
+    </header>
     <h1>
         <img src="https://i.ibb.co/j5tSMPV/image.jpg" alt="밥친구 로그인" width="200" height="150">
-        <nav>밥친구 로그인</nav>
+        <nav>로그인</nav>
     </h1>
 
-    <!-- 로그인 폼 추가 -->
-    <!-- action 속성을 "/login"으로 수정 -->
+    <!-- 아이디와 비밀번호 입력 필드 추가 -->
     <form th:action="@{/member/login}" method="post">
-        <div th:if="${param.error}">
-            <div class="alert alert-danger">
-                ID 또는 비밀번호를 확인해 주세요.
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="username" class="form-label">아이디</label>
-            <input type="text" name="username" id="username" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">비밀번호</label>
-            <input type="password" name="password" id="password" class="form-control">
-        </div>
-        <button type="submit" class="btn btn-primary">로그인</button>
+        <label for="username">아이디:</label><br>
+        <input type="text" id="username" name="username" placeholder="아이디"><br>
+        <label for="password">비밀번호:</label><br>
+        <input type="password" id="password" name="password" placeholder="비밀번호"><br><br>
+        <!-- 로그인 버튼 추가 -->
+        <button type="submit" class="btn">로그인</button>
     </form>
 
-    <!-- 로그인 실패 시 메시지를 여기에 추가 -->
-    <!-- 로그인 실패 메시지 수정 -->
-    <p id="loginError" style="color: red; display: none;">아이디 또는 비밀번호가 잘못되었습니다.</p>
+    <!-- 이미지로 구글 로그인 링크 추가 -->
+    <a href="https://accounts.google.com/signin/oauth" class="oauth-btn google">
+        <span class="icon"></span>
+        <span class="tpaLoginTxt">Google 계정으로 로그인</span>
+    </a>
 
-    <!-- 회원 가입 페이지로 이동하는 링크 -->
-    <a href="/member/signup">회원 가입하기</a>
+    <!-- 카카오 로그인 링크 추가 -->
+    <a href="/oauth2/authorization/kakao" class="oauth-btn kakao">
+        <span class="tpaLoginTxt">카카오 로그인</span>
+    </a>
+
+    <div>
+        <a href="/register" class="register-btn">
+            회원가입
+        </a>
+    </div>
 </div>
-
-<script>
-    // 로그인 폼 이벤트 리스너 등록
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
-        event.preventDefault(); // 폼 기본 제출 동작 방지
-
-        // 로그인 요청을 서버로 보내고, 성공 또는 실패에 따라 처리
-        var formData = new FormData(this);
-        fetch("/member/login", {
-            method: "POST",
-            body: formData
-        })
-        .then(response => {
-            if (response.ok) {
-                // 로그인 성공 시 메인 페이지로 리디렉션
-                window.location.href = "/home";
-            } else {
-                // 로그인 실패 시 에러 메시지 표시
-                document.getElementById("loginError").style.display = "block";
-            }
-        })
-        .catch(error => console.error("Error:", error));
-    });
-</script>
 </body>
 </html>

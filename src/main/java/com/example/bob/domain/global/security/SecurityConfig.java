@@ -1,4 +1,4 @@
-package com.example.bob.domain.global.security;
+package com.example.blog.global.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,10 +24,17 @@ public class SecurityConfig {
                 .formLogin(
                         formLogin -> formLogin
                                 .loginPage("/member/login")
+                                .defaultSuccessUrl("/")
+                )
+                .oauth2Login(
+                        oauth2Login -> oauth2Login
+                                .loginPage("/member/login")
                 )
                 .logout(
                         logout -> logout
-                                .logoutUrl("/member/logout")
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                                .logoutSuccessUrl("/")
+                                .invalidateHttpSession(true)
                 )
         ;
         return http.build();
@@ -37,7 +44,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

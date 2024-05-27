@@ -76,8 +76,8 @@
         <a href="/">밥은 먹고 다니냐?</a>
     </div>
     <div style="float: right;">
-        <a th:href="@{/member/login}" class="nav-link" sec:authorize="isAnonymous()" onclick="toggleLoginState(true)">로그인</a>
-        <span th:href="@{/member/logout}" class="nav-link" sec:authorize="isAuthenticated()" style="display: none;"><a href="#" onclick="logout()">로그아웃</a></span>
+        <a sec:authorize="isAnonymous()" href="/member/login">로그인</a>
+        <a sec:authorize="isAuthenticated()" href="/member/logout">로그아웃</a>
     </div>
     <div style="float: right; margin-right: 10px;">
         <a href="member/myPage">마이 프로필</a>

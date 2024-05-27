@@ -39,7 +39,7 @@
 <div class="container">
     <h1>내 정보 페이지</h1>
     <!-- 상단 중앙에는 등록된 사진 표시 -->
-    <img class="profile-img" th:src="${member.selfie}" alt="프로필 사진">
+    <img class="profile-img" th:src=" 'data.image/jpeg;base64,' + ${base64Image} " alt="프로필 사진">
     <!-- 회원 정보 출력 -->
     <p>회원 아이디: <span th:text="${member.username}"></span></p>
     <p>닉네임: <span th:text="${member.nickname}"></span></p>

@@ -1,6 +1,5 @@
 package com.example.bob.domain.member.service;
 
-
 import com.example.bob.domain.member.entity.Member;
 import com.example.bob.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     public Member getCurrentMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -26,13 +24,15 @@ public class MemberService {
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
     }
 
-    public Member signup(MultipartFile selfie, String phoneNumber, String name, String username, String password, String email, int age, String gender, String region, String favoriteFood) throws IOException {
+    public void signup(String username, String phoneNumber, String nickname, String password,
+                       String email, int age, String gender, String region, String favoriteFood,
+                       MultipartFile selfie) throws IOException { // IOException 추가
         // 회원 객체 생성
         Member member = Member.builder()
                 .phoneNumber(phoneNumber)
                 .username(username)
                 .password(passwordEncoder.encode(password))
-                .nickname(name)
+                .nickname(nickname)
                 .email(email)
                 .age(age)
                 .gender(gender)
@@ -41,11 +41,7 @@ public class MemberService {
                 .selfie(selfie.getBytes()) // MultipartFile을 byte 배열로 변환하여 저장
                 .build();
 
-        member.setSelfie(selfie.getBytes());
-
         // 생성된 회원 객체를 저장소에 저장
-        return memberRepository.save(member);
+        memberRepository.save(member);
     }
-
-
 }
