@@ -68,6 +68,8 @@
             left: 10px;
         }
     </style>
+    <!-- email.js 파일을 포함합니다. -->
+    <script src="/static/js/email.js"></script>
 </head>
 <body>
 <a th:href="@{/}" class="main-btn">메인 화면으로 이동</a>
@@ -89,6 +91,10 @@
         <input type="password" id="password" name="password" required><br>
         <label for="email">이메일 (필수):</label><br>
         <input type="email" id="email" name="email" required><br>
+        <button type="button" id="sendVerificationCodeBtn" class="btn">인증번호 받기</button><br>
+        <label for="verificationCode">인증번호:</label><br>
+        <input type="text" id="verificationCode" name="verificationCode" style="display: none;"><!-- 처음에는 숨겨놓습니다 -->
+        <button type="button" id="verifyCodeBtn" class="btn" style="display: none;">인증번호 확인</button><br><br>
         <label for="age">나이 (필수, 성인만 가능):</label><br>
         <input type="number" id="age" name="age" required min="18"><br>
         <label for="gender">성별:</label><br>
@@ -111,18 +117,75 @@
     </form>
     <a th:href="@{/member/login}">이미 회원이신가요? 로그인하기</a>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var sendVerificationCodeBtn = document.getElementById("sendVerificationCodeBtn");
+        var verifyCodeBtn = document.getElementById("verifyCodeBtn");
+        var verificationCodeInput = document.getElementById("verificationCode");
 
-<script th:inline="javascript">
-    /* Thymeleaf를 사용하여 success 변수 체크 */
-    var success = [[${success}]];
+        sendVerificationCodeBtn.addEventListener("click", function() {
+            var email = document.getElementById("email").value;
 
-    /* 회원 가입이 성공적으로 완료되었을 경우 메시지 표시 및 로그인 페이지로 리다이렉트 */
-    if (success) {
-        if (confirm('회원 가입이 완료되었습니다. 로그인 페이지로 이동하시겠습니까?')) {
-            window.location.href = "/member/login";
+            // 이메일 주소 유효성 검사
+            if (!email) {
+                alert("이메일 주소를 입력하세요.");
+                return;
+                return;
+            }
+
+            // 서버로 이메일을 보내는 함수 호출
+            sendVerificationCode(email);
+        });
+
+        function sendVerificationCode(email) {
+            // 이메일을 서버로 보내고 서버에서 인증 코드를 생성하여 전송하는 로직을 추가합니다.
+            // 여기에 AJAX 요청을 보내거나, Thymeleaf의 th:action을 사용하여 컨트롤러의 URL로 이동하는 등의 방법으로 서버로 요청을 보낼 수 있습니다.
+            // EmailService를 사용하여 이메일을 보낼 수 있습니다.
+
+            // AJAX 요청을 통해 서버로 이메일을 전송하고, 성공적으로 전송되었을 때의 처리를 구현합니다.
+            // AJAX를 사용할 때의 예시는 아래와 같습니다.
+            // $.ajax({
+            //     type: "POST",
+            //     url: "/member/sendVerificationCode",
+            //     data: { email: email },
+            //     success: function(response) {
+            //         alert("이메일로 인증 코드를 전송했습니다. 이메일을 확인하세요.");
+            //         // 여기에서는 서버로부터 받은 응답(response)에 따라 추가적인 처리를 할 수 있습니다.
+            //         // 이 예시에서는 단순히 알림 메시지만 표시하였습니다.
+            //     },
+            //     error: function(xhr, status, error) {
+            //         alert("이메일 전송 중 오류가 발생했습니다.");
+            //         // 오류가 발생했을 때의 처리를 구현합니다.
+            //     }
+            // });
+
+            // 임시로 인증번호를 생성
+            var verificationCode = Math.floor(100000 + Math.random() * 900000); // 6자리 랜덤 숫자 생성
+
+            // 이메일을 서버로 전송하는 로직이 구현되면, 아래의 코드는 삭제하고 대신 서버에서 생성한 인증번호를 사용합니다.
+            // var verificationCode = 서버에서 생성한 인증번호;
+
+            // 버튼 텍스트 변경
+            sendVerificationCodeBtn.innerText = "인증번호 확인";
+            // 버튼 클릭 이벤트 추가
+            sendVerificationCodeBtn.removeEventListener("click", arguments.callee);
+            sendVerificationCodeBtn.addEventListener("click", function() {
+                var enteredCode = document.getElementById("verificationCode").value;
+                if (enteredCode === verificationCode.toString()) {
+                    alert("인증에 성공했습니다.");
+                    // 여기에 회원가입 등의 로직을 추가할 수 있습니다.
+                } else {
+                    alert("인증번호가 올바르지 않습니다.");
+                }
+            });
+            // "인증번호" 입력 필드와 "인증번호 확인" 버튼을 표시
+            verificationCodeInput.style.display = "block";
+            verifyCodeBtn.style.display = "inline-block";
+
+            // 이메일로 인증번호를 보내는 로직을 추가할 수 있습니다.
+            // 여기에 서버로 요청을 보내는 코드를 추가하여 이메일을 전송할 수 있습니다.
         }
-    }
+    });
 </script>
-
 </body>
 </html>
