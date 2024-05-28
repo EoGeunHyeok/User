@@ -11,6 +11,8 @@ java {
 	sourceCompatibility = '17'
 }
 
+compileJava.options.compilerArgs += ["-parameters"]
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -38,6 +40,12 @@ dependencies {
 
 	// Oauth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// 이메일
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	// Hibernate Validator 추가
+	implementation 'org.hibernate.validator:hibernate-validator'
 }
 
 tasks.named('test') {

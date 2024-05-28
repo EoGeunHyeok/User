@@ -3,11 +3,10 @@ package com.example.bob.domain.member.service;
 import com.example.bob.domain.member.entity.Member;
 import com.example.bob.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -19,40 +18,63 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public Member getCurrentMember() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return memberRepository.findByusername(username)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
     }
 
     public void signup(String username, String phoneNumber, String nickname, String password,
-                       String email, int age, String gender, String region, String favoriteFood,
-                       MultipartFile selfie) throws IOException { // IOException 추가
-        // 회원 객체 생성
+                       String email, int age, String gender, String region, String favoriteFood) {
         Member member = Member.builder()
-                .phoneNumber(phoneNumber)
                 .username(username)
-                .password(passwordEncoder.encode(password))
+                .phoneNumber(phoneNumber)
                 .nickname(nickname)
+                .password(passwordEncoder.encode(password))
                 .email(email)
                 .age(age)
                 .gender(gender)
                 .region(region)
                 .favoriteFood(favoriteFood)
-                .selfie(selfie.getBytes()) // MultipartFile을 byte 배열로 변환하여 저장
                 .build();
 
-        // 생성된 회원 객체를 저장소에 저장
         memberRepository.save(member);
     }
-
-
-
 
     private Optional<Member> findByUsername(String username) {
         return memberRepository.findByusername(username);
     }
 
+    @Transactional
+    public Member whenSocialLogin(String username, String nickname) throws IOException {
+        Optional<Member> opMember = findByUsername(username);
 
+        if (opMember.isPresent()) {
+            return opMember.get();
+        }
 
+        // 소셜 로그인을 통한 가입 시 비밀번호와 기타 정보는 빈 문자열로 초기화
+        signup(username, "", nickname, "", "", 0, "", "", ""); // signup 메서드는 void를 반환하므로 반환값 없음
+        return getMemberByUsername(username); // 저장된 회원을 다시 조회하여 반환
+    }
+
+    public Member signupWithBasicInfo(String username, String nickname) {
+        Member member = Member.builder()
+                .username(username)
+                .nickname(nickname)
+                .password("") // 비밀번호는 빈 문자열로 설정
+                .phoneNumber("")
+                .email("")
+                .age(0)
+                .gender("")
+                .region("")
+                .favoriteFood("")
+                .build();
+
+        return memberRepository.save(member);
+    }
+
+    public Member getMemberByUsername(String username) {
+        return memberRepository.findByusername(username)
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+    }
 }

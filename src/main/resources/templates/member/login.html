@@ -146,21 +146,11 @@
     </a>
 
     <div>
-        <a href="/register" class="register-btn">
-            회원가입
+        <a th:href="@{/member/signup}">회원가입하러가기</a>
         </a>
     </div>
 </div>
 
-<script th:inline="javascript">
-    /* Thymeleaf를 사용하여 loggedIn 변수 설정 */
-    var loggedIn = [[${loggedIn}]];
-
-    /* 만약 로그인되어 있지 않다면 로그인 페이지로 리다이렉트 */
-    if (!loggedIn) {
-        window.location.href = "/member/login";
-    }
-</script>
 
 </body>
 </html>

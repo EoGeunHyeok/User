@@ -3,7 +3,6 @@
 <head>
     <title>회원 가입</title>
     <style>
-        /* 스타일은 로그인 페이지와 동일하게 사용합니다 */
         body {
             display: flex;
             justify-content: center;
@@ -34,7 +33,7 @@
         input[type="password"],
         input[type="email"],
         input[type="number"] {
-            width: calc(100% - 20px); /* padding의 총합을 빼줍니다 */
+            width: calc(100% - 20px);
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
@@ -63,7 +62,6 @@
         .btn:hover {
             background-color: #0056b3;
         }
-        /* 상단 좌측에 위치시킬 버튼 스타일 */
         .main-btn {
             position: absolute;
             top: 10px;
@@ -71,40 +69,33 @@
         }
     </style>
 </head>
-
 <body>
-<!-- 메인으로 이동하는 버튼 -->
 <a th:href="@{/}" class="main-btn">메인 화면으로 이동</a>
-
 <div class="container">
     <h1>
         <img th:src="@{https://i.ibb.co/j5tSMPV/image.jpg}" alt="밥친구 로그인" width="200" height="150">
         <nav>밥친구 회원 가입</nav>
     </h1>
 
-    <!-- 회원 가입 폼 추가 -->
-    <form action="/member/signup" method="post" enctype="multipart/form-data">
-        <label for="selfie">본인 사진 (필수):</label><br>
-        <input type="file" id="selfie" name="selfie" accept="image/*" required><br>
-        <label for="phone_number">전화번호 (필수):</label><br>
-        <input type="text" id="phone_number" name="phone_number" required><br>
-        <label for="name">이름 (필수):</label><br>
-        <input type="text" id="name" name="name" required><br>
+    <form action="/member/signup" method="post" enctype="multipart/form-data" th:action="@{/member/signup}">
+
+        <label for="phoneNumber">전화번호 (필수):</label><br>
+        <input type="text" id="phoneNumber" name="phoneNumber" required><br>
         <label for="username">아이디 (필수):</label><br>
         <input type="text" id="username" name="username" required><br>
+        <label for="nickname">닉네임 (필수):</label><br>
+        <input type="text" id="nickname" name="nickname" required><br>
         <label for="password">비밀번호 (필수):</label><br>
         <input type="password" id="password" name="password" required><br>
         <label for="email">이메일 (필수):</label><br>
         <input type="email" id="email" name="email" required><br>
         <label for="age">나이 (필수, 성인만 가능):</label><br>
         <input type="number" id="age" name="age" required min="18"><br>
-        <!-- 성별 선택 -->
         <label for="gender">성별:</label><br>
         <input type="radio" id="male" name="gender" value="male">
         <label for="male">남성</label>
         <input type="radio" id="female" name="gender" value="female">
         <label for="female">여성</label><br>
-        <!-- 지역 선택 -->
         <label for="region">지역:</label><br>
         <select id="region" name="region">
             <option value="서울">서울</option>
@@ -114,15 +105,24 @@
             <option value="부산">부산</option>
             <!-- 다른 지역 옵션들 추가 -->
         </select><br><br>
-        <!-- 생략: 관심사, MBTI, 취미, SNS 아이디, 직업, 선호음식 필드 -->
-        <label for="favorite_food">선호 음식 (필수):</label><br>
-        <input type="text" id="favorite_food" name="favorite_food" required><br><br>
-        <!-- 회원 가입 버튼 추가 -->
+        <label for="favoriteFood">선호 음식 (필수):</label><br>
+        <input type="text" id="favoriteFood" name="favoriteFood" required><br><br>
         <button type="submit" class="btn">회원 가입</button>
     </form>
-
-    <!-- 로그인 페이지로 이동하는 링크 -->
     <a th:href="@{/member/login}">이미 회원이신가요? 로그인하기</a>
 </div>
+
+<script th:inline="javascript">
+    /* Thymeleaf를 사용하여 success 변수 체크 */
+    var success = [[${success}]];
+
+    /* 회원 가입이 성공적으로 완료되었을 경우 메시지 표시 및 로그인 페이지로 리다이렉트 */
+    if (success) {
+        if (confirm('회원 가입이 완료되었습니다. 로그인 페이지로 이동하시겠습니까?')) {
+            window.location.href = "/member/login";
+        }
+    }
+</script>
+
 </body>
 </html>

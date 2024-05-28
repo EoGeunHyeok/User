@@ -3,7 +3,6 @@ package com.example.bob.domain.member.entity;
 import com.example.bob.domain.global.jpa.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,9 +36,6 @@ public class Member extends BaseEntity {
 
     @Comment("성별")
     private String gender;
-
-    @Lob
-    private byte[] selfie;
 
     @Comment("나이")
     private int age; // 나이 필드 추가
