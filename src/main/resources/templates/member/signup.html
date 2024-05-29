@@ -77,9 +77,9 @@
         <nav>밥친구 회원 가입</nav>
     </h1>
 
-    <form id="signupForm" action="/member/signup" method="post" enctype="multipart/form-data" >
-        <input type="file" name="thumbnail" accept="image/png, image/gif, image/jpeg"><br>
-        <label for="phoneNumber">&nbsp전화번호 (필수):</label><br>
+    <form id="signupForm" action="/member/signup" method="post" enctype="multipart/form-data" th:action="@{/member/signup}">
+<!--        <input type="file" name="thumbnailImg" accept="image/png, image/gif, image/jpeg"><br>-->
+        <label for="phoneNumber">전화번호 (필수):</label><br>
         <input type="text" id="phoneNumber" name="phoneNumber" required><br>
         <label for="username">아이디 (필수):</label><br>
         <input type="text" id="username" name="username" required><br>
@@ -89,7 +89,6 @@
         <input type="password" id="password" name="password" required><br>
         <label for="email">이메일 (필수):</label><br>
         <input type="email" id="email" name="email" required><br>
-        <button type="button" class="btn" onclick="sendVerificationEmail()">인증번호받기</button>
         <label for="age">나이 (필수, 성인만 가능):</label><br>
         <input type="number" id="age" name="age" required min="18"><br>
         <label for="gender">성별:</label><br>
@@ -121,7 +120,7 @@
             return;
         }
 
-        fetch('/member/sendVerificationEmail', {
+        fetch('/sendVerificationEmail', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

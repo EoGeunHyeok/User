@@ -34,6 +34,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Map<String, Object> attributesProperties = (Map<String, Object>) attributes.get("properties");
         String nickname = (String) attributesProperties.get("nickname");
+        String thumbnailUrl = (String) attributesProperties.get("thumbnail_image");
 
         String providerTypeCode = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
         String username = providerTypeCode + "__%s".formatted(oauthId);

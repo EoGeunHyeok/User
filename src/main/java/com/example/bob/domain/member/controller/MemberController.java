@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -56,9 +55,9 @@ public class MemberController {
 
     @PostMapping("/signup")
     public String signup(String username, String phoneNumber, String nickname, String password,
-                         String email, int age, String gender, String region, String favoriteFood, @RequestParam("thumbnail") MultipartFile thumbnail, Model model) {
+                         String email, int age, String gender, String region, String favoriteFood, Model model) {
         try {
-            memberService.signup(username, phoneNumber, nickname, password, email, age, gender, region, favoriteFood, thumbnail);
+            memberService.signup(username, phoneNumber, nickname, password, email, age, gender, region, favoriteFood);
 
             String subject = " 회원가입!";
             String body = "회원가입 성공 이메일!" + LocalDateTime.now();;

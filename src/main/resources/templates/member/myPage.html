@@ -35,13 +35,14 @@
 </head>
 
 <body>
+
 <!-- 내 정보 페이지 -->
 <div class="container">
+    <a th:href="@{/}" class="main-btn">메인 화면으로 이동</a><br>
     <h1>내 정보 페이지</h1>
     <!-- 상단 중앙에는 등록된 사진 표시 -->
     <!-- 회원 정보 출력 -->
-    <img th:src="@{|/file/${member.thumbnailImg}|}" alt="프로필 사진" class="profile-img"/>
-    <p>회원 아이디: <span th:text="${member.username}"></span></p>
+<!--    <img th:src="@{|/file/${member.thumbnailImg}|}" alt="프로필 사진" class="profile-img"/>-->
     <p>닉네임: <span th:text="${member.nickname}"></span></p>
     <p>이메일: <span th:text="${member.email}"></span></p>
     <p>전화번호: <span th:text="${member.phoneNumber}"></span></p>
