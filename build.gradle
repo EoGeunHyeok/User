@@ -46,6 +46,9 @@ dependencies {
 
 	// Hibernate Validator 추가
 	implementation 'org.hibernate.validator:hibernate-validator'
+
+	// Add this line for MockMultipartFile
+	testImplementation 'org.springframework:spring-test'
 }
 
 tasks.named('test') {

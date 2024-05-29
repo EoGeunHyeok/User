@@ -38,6 +38,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String providerTypeCode = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
         String username = providerTypeCode + "__%s".formatted(oauthId);
 
+
+
         Member member;
         List<GrantedAuthority> authorityList = new ArrayList<>();
 

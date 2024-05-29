@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Verification Email</title>
+    <style>
+        /* 스타일은 로그인 페이지와 동일하게 사용합니다 */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        h1 {
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        /* 추가적인 스타일링은 필요에 따라 작성하세요 */
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Send Verification Email</h1>
+    <form th:action="@{/sendVerificationEmail}" method="post">
+        <input type="email" name="email" placeholder="email" required>
+        <button type="submit">Send Verification Code</button>
+    </form>
+    <p th:if="${error}" th:text="${error}"></p>
+</div>
+</body>
+</html>
+
