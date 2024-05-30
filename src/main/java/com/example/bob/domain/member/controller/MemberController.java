@@ -5,12 +5,14 @@ import com.example.bob.domain.member.entity.Member;
 import com.example.bob.domain.member.service.MemberService;
 import com.example.bob.domain.member.service.VerificationCodeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -52,24 +54,32 @@ public class MemberController {
     }
 
 
-
+    @Value("${custom.fileDirPath}")
+    private String fileDirPath;
     @PostMapping("/signup")
-    public String signup(String username, String phoneNumber, String nickname, String password,
-                         String email, int age, String gender, String region, String favoriteFood, Model model) {
-        try {
-            memberService.signup(username, phoneNumber, nickname, password, email, age, gender, region, favoriteFood);
+    public String signup(@RequestParam("username") String username,
+                         @RequestParam("phoneNumber") String phoneNumber,
+                         @RequestParam("nickname") String nickname,
+                         @RequestParam("password") String password,
+                         @RequestParam("email") String email,
+                         @RequestParam("age") int age,
+                         @RequestParam("gender") String gender,
+                         @RequestParam("region") String region,
+                         @RequestParam("favoriteFood") String favoriteFood,
+                         @RequestParam("thumbnail") MultipartFile thumbnail) {
 
-            String subject = " 회원가입!";
-            String body = "회원가입 성공 이메일!" + LocalDateTime.now();;
+
+            // 파일 업로드 성공 시 회원 가입 처리
+            memberService.signup2(username, phoneNumber, nickname, password, email, age, gender, region, favoriteFood, thumbnail);
+
+            String subject = "회원가입!";
+            String body = "회원가입 성공 이메일! " + LocalDateTime.now();
             emailService.send(email, subject, body);
 
-
             return "member/login"; // 회원 가입 후 로그인 페이지로 리다이렉트
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "회원 가입 중 오류가 발생했습니다.");
-            return "member/signup"; // 오류 발생 시 다시 회원 가입 페이지로
+
         }
-    }
+
 
 
     @GetMapping("/sendVerificationEmail")

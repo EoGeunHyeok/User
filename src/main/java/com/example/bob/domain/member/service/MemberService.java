@@ -8,9 +8,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,33 +29,33 @@ public class MemberService {
     @Value("${custom.fileDirPath}")
     private String fileDirPath;
 
-//    public void signup2(String username, String phoneNumber, String nickname, String password,
-//                       String email, int age, String gender, String region, String favoriteFood, MultipartFile thumbnail) {
-//
-//        String thumbnailRelPath = "post/" + UUID.randomUUID().toString() + ".jpg";
-//        File thumbnailFile = new File(fileDirPath + "/" + thumbnailRelPath);
-//
-//        try {
-//            thumbnail.transferTo(thumbnailFile);
-//        } catch ( IOException e ) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        Member member = Member.builder()
-//                .username(username)
-//                .phoneNumber(phoneNumber)
-//                .nickname(nickname)
-//                .password(passwordEncoder.encode(password))
-//                .email(email)
-//                .age(age)
-//                .gender(gender)
-//                .region(region)
-//                .favoriteFood(favoriteFood)
-//                .thumbnailImg(thumbnailRelPath)
-//                .build();
-//
-//        memberRepository.save(member);
-//    }
+    public void signup2(String username, String phoneNumber, String nickname, String password,
+                       String email, int age, String gender, String region, String favoriteFood, MultipartFile thumbnail) {
+
+        String thumbnailRelPath = "post/" + UUID.randomUUID().toString() + ".jpg";
+        File thumbnailFile = new File(fileDirPath + "/" + thumbnailRelPath);
+
+        try {
+            thumbnail.transferTo(thumbnailFile);
+        } catch ( IOException e ) {
+            throw new RuntimeException(e);
+        }
+
+        Member member = Member.builder()
+                .username(username)
+                .phoneNumber(phoneNumber)
+                .nickname(nickname)
+                .password(passwordEncoder.encode(password))
+                .email(email)
+                .age(age)
+                .gender(gender)
+                .region(region)
+                .favoriteFood(favoriteFood)
+                .thumbnailImg(thumbnailRelPath)
+                .build();
+
+        memberRepository.save(member);
+    }
     public void signup(String username, String phoneNumber, String nickname, String password,
                        String email, int age, String gender, String region, String favoriteFood) {
 

@@ -46,7 +46,7 @@ public class Member extends BaseEntity {
     @Comment("선호 음식")
     private String favoriteFood;
 
-//    @Comment("사진")
-//    private String thumbnailImg;
+    @Comment("사진")
+    private String thumbnailImg;
 
 }
