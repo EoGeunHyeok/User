@@ -42,6 +42,7 @@ public class MemberController {
         return "member/signup"; // signup.html을 반환
     }
 
+
     @PostMapping("/signup")
     public String signup(@RequestParam("username") String username,
                          @RequestParam("phoneNumber") String phoneNumber,
@@ -56,19 +57,23 @@ public class MemberController {
                          @RequestParam("favoriteFood") String favoriteFood,
                          @RequestParam("thumbnail") MultipartFile thumbnail) {
 
+        // 이메일 확인용 코드 생성
+        String verificationCode = verificationCodeService.generateVerificationCode(email);
+        // 회원가입 확인 이메일 보내기
 
-            // 파일 업로드 성공 시 회원 가입 처리
-            memberService.signup2(username, phoneNumber, nickname, password, email, age, gender, region, favoriteFood, mbti, sns, thumbnail);
+        String subject = "회원가입 인증코드";
+        String body = "회원가입인증 코드입니다. : " + verificationCode;
+        emailService.send(email, subject, body);
 
-            String subject = "차은우보단!";
-            String body = "박현철 !! " ;
-            emailService.send(email, subject, body);
+        // 파일 업로드 성공 시 회원 가입 처리
+        memberService.signup2(username, phoneNumber, nickname, password, email, age, gender, region, favoriteFood, mbti, sns, thumbnail);
 
-            return "member/login"; // 회원 가입 후 로그인 페이지로 리다이렉트
-
-        }
-
-
-
+        // 회원 가입 후 로그인 페이지로 리다이렉트
+        return "redirect:/member/login";
+    }
+//    @GetMapping("/verifyCode")
+//    public String verifyCode(Model model) {
+//        return "member/verifyCode"; // verifyCode.html을 반환
+//    }
 
 }
