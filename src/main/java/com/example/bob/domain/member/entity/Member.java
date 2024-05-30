@@ -49,4 +49,12 @@ public class Member extends BaseEntity {
     @Comment("사진")
     private String thumbnailImg;
 
+    @Comment("mbti")
+    private String mbti;
+
+    @Comment("sns")
+    private String sns;
+
+
+
 }

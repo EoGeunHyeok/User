@@ -30,7 +30,7 @@ public class MemberService {
     private String fileDirPath;
 
     public void signup2(String username, String phoneNumber, String nickname, String password,
-                       String email, int age, String gender, String region, String favoriteFood, MultipartFile thumbnail) {
+                       String email, int age, String gender, String region, String favoriteFood, String mbti, String sns,MultipartFile thumbnail) {
 
         String thumbnailRelPath = "post/" + UUID.randomUUID().toString() + ".jpg";
         File thumbnailFile = new File(fileDirPath + "/" + thumbnailRelPath);
@@ -52,6 +52,8 @@ public class MemberService {
                 .region(region)
                 .favoriteFood(favoriteFood)
                 .thumbnailImg(thumbnailRelPath)
+                .sns(sns)
+                .mbti(mbti)
                 .build();
 
         memberRepository.save(member);

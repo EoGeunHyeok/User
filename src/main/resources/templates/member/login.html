@@ -132,6 +132,7 @@
         <input type="password" id="password" name="password" placeholder="비밀번호"><br><br>
         <!-- 로그인 버튼 추가 -->
         <button type="submit" class="btn">로그인</button>
+        <p th:if="${param.error}" class="error-message">아이디 혹은 비밀번호를 확인해주세요.</p>
     </form>
 
     <!-- 이미지로 구글 로그인 링크 추가 -->

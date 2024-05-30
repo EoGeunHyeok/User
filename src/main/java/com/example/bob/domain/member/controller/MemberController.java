@@ -5,18 +5,14 @@ import com.example.bob.domain.member.entity.Member;
 import com.example.bob.domain.member.service.MemberService;
 import com.example.bob.domain.member.service.VerificationCodeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Controller
@@ -34,10 +30,6 @@ public class MemberController {
         return "member/login";
     }
 
-    //    @GetMapping("/signup")
-//    public String signupPage() {
-//        return "member/signup";
-//    }
     @GetMapping("/myPage")
     public String myPage(Model model) {
         Member currentMember = memberService.getCurrentMember();
@@ -45,17 +37,11 @@ public class MemberController {
         return "member/myPage";
     }
 
-
-
-
     @GetMapping("/signup")
     public String signupForm(Model model) {
         return "member/signup"; // signup.html을 반환
     }
 
-
-    @Value("${custom.fileDirPath}")
-    private String fileDirPath;
     @PostMapping("/signup")
     public String signup(@RequestParam("username") String username,
                          @RequestParam("phoneNumber") String phoneNumber,
@@ -65,15 +51,17 @@ public class MemberController {
                          @RequestParam("age") int age,
                          @RequestParam("gender") String gender,
                          @RequestParam("region") String region,
+                         @RequestParam("mbti") String mbti,
+                         @RequestParam("sns") String sns,
                          @RequestParam("favoriteFood") String favoriteFood,
                          @RequestParam("thumbnail") MultipartFile thumbnail) {
 
 
             // 파일 업로드 성공 시 회원 가입 처리
-            memberService.signup2(username, phoneNumber, nickname, password, email, age, gender, region, favoriteFood, thumbnail);
+            memberService.signup2(username, phoneNumber, nickname, password, email, age, gender, region, favoriteFood, mbti, sns, thumbnail);
 
-            String subject = "회원가입!";
-            String body = "회원가입 성공 이메일! " + LocalDateTime.now();
+            String subject = "차은우보단!";
+            String body = "박현철 !! " ;
             emailService.send(email, subject, body);
 
             return "member/login"; // 회원 가입 후 로그인 페이지로 리다이렉트
@@ -82,55 +70,5 @@ public class MemberController {
 
 
 
-    @GetMapping("/sendVerificationEmail")
-    public String showEmailForm() {
-        return "member/sendVerificationEmail";
-    }
 
-    @PostMapping("/sendVerificationEmail")
-    public ResponseEntity<Map<String, Object>> sendVerificationEmail(@RequestParam("email") String email) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            // 이메일로 인증 코드 생성 및 전송
-            String verificationCode = verificationCodeService.generateVerificationCode();
-            emailService.send(email, "이메일 인증 코드", "인증 코드: " + verificationCode);
-
-            // 이메일과 인증 코드를 세션에 저장 (생략)
-            response.put("success", true);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            // 오류 발생 시 클라이언트에게 오류 응답 전송
-            response.put("success", false);
-            response.put("error", "오류가 발생했습니다.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-
-    @GetMapping("/verifyCode")
-    public String showVerificationForm(@RequestParam("email") String email, Model model) {
-        model.addAttribute("email", email);
-        return "member/verifyCode";
-    }
-
-    @PostMapping("/verifyCode")
-    public String verifyCode(@RequestParam("email") String email, @RequestParam("code") String code, @ModelAttribute("verificationCode") String sessionCode, Model model) {
-        if (sessionCode != null && sessionCode.equals(code)) {
-            return "member/signup";
-        } else {
-            model.addAttribute("error", "인증 코드가 잘못되었습니다.");
-            return "member/verifyCode";
-        }
-    }
-
-    @PostMapping("/verifyEmail")
-    public ResponseEntity<String> verifyEmail(@RequestParam("verificationCode") String verificationCode) {
-        // 인증 코드 확인
-        boolean isValid = verificationCodeService.verifyVerificationCode(verificationCode);
-
-        if (isValid) {
-            return ResponseEntity.ok("이메일 인증이 완료되었습니다. 회원가입을 완료하세요.");
-        } else {
-            return ResponseEntity.badRequest().body("유효하지 않은 인증 코드입니다.");
-        }
-    }
 }
