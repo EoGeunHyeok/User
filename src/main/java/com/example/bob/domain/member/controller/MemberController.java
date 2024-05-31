@@ -4,6 +4,7 @@ import com.example.bob.domain.email.EmailService;
 import com.example.bob.domain.member.entity.Member;
 import com.example.bob.domain.member.service.MemberService;
 import com.example.bob.domain.member.service.VerificationCodeService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -69,11 +70,21 @@ public class MemberController {
         memberService.signup2(username, phoneNumber, nickname, password, email, age, gender, region, favoriteFood, mbti, sns, thumbnail);
 
         // 회원 가입 후 로그인 페이지로 리다이렉트
-        return "redirect:/member/login";
+        return "redirect:/member/verifyCode";
     }
-//    @GetMapping("/verifyCode")
-//    public String verifyCode(Model model) {
-//        return "member/verifyCode"; // verifyCode.html을 반환
-//    }
+    @GetMapping("/verifyCode")
+    public String verifyCodeForm(Model model) {
+        return "member/verifyCode"; // verifyCode.html을 반환
+    }
+    @PostMapping("/verifyCode")
+    public String verifyCode(@RequestParam("verification") String verificationCode, HttpSession session) {
+        String storedVerification = (String) session.getAttribute("verificationCode");
+        if (verificationCode != null && verificationCode.equals(storedVerification)) {
+            session.removeAttribute("verification");
+            return "member/login";
+        } else {
+            return "member/verifyCode";
+        }
+    }
 
 }

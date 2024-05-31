@@ -44,17 +44,15 @@ public class EmailService {
     // 인증번호 및 임시 비밀번호 생성 메서드
     public String createCode() {
         Random random = new Random();
-        StringBuffer key = new StringBuffer();
-
+        StringBuilder key = new StringBuilder();
         for (int i = 0; i < 8; i++) {
-            int index = random.nextInt(4);
-
+            int index = random.nextInt(5);
             switch (index) {
                 case 0:
-                    key.append((char) ((int) random.nextInt(26) + 97));
+                    key.append((char) (random.nextInt(26) + 97));
                     break;
                 case 1:
-                    key.append((char) ((int) random.nextInt(26) + 65));
+                    key.append((char) (random.nextInt(26) + 65));
                     break;
                 default:
                     key.append(random.nextInt(9));

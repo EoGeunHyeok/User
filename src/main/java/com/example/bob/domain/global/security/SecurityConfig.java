@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .oauth2Login(
                         oauth2Login -> oauth2Login
                                 .loginPage("/member/login")
+                                .defaultSuccessUrl("/")
                 )
                 .logout(
                         logout -> logout
@@ -36,7 +37,10 @@ public class SecurityConfig {
                                 .logoutSuccessUrl("/")
                                 .invalidateHttpSession(true)
                 )
+
+
         ;
+
         return http.build();
     }
 

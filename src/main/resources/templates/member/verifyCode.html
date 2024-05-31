@@ -57,9 +57,15 @@
 <div class="container">
     <h1>이메일 인증</h1>
 
-    <form action="/member/verifyCode" method="post" th:action="@{/member/verifyCode}">
-        <label for="verificationCode">인증 코드 입력:</label><br>
-        <input type="text" id="verificationCode" name="verificationCode" required><br>
+<!--    <form action="/member/verifyCode" method="post" th:action="@{/member/login}">-->
+<!--        <label for="verification">인증 코드 입력:</label><br>-->
+<!--        <input type="text" id="verification" name="verification" required><br>-->
+<!--        <button type="submit" class="btn">확인</button>-->
+<!--    </form>-->
+
+    <form action="/member/verifyCode" method="post" >
+        <label for="verification">인증 코드 입력:</label><br>
+        <input type="text" id="verification" name="verificationCode" required><br>
         <button type="submit" class="btn">확인</button>
     </form>
 
